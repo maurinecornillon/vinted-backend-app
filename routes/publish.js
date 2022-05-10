@@ -44,7 +44,7 @@ router.post("/publish", isAuthenticated, async (req, res) => {
     //}).populate({ path: "owner", select: "account" });
     res.json(newOffer);
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });
 
