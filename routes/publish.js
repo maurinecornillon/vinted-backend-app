@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const formidable = require("express-formidable");
-const mongoose = require("mongoose");
-const app = express();
-app.use(formidable());
+
 const cloudinary = require("cloudinary").v2;
 
 // Import des models
@@ -56,7 +53,7 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 
 router.get("/offers", async (req, res) => {
   console.log("Afficher les annonces");
-
+  3;
   try {
     const filtersObject = {}; // créa d'une variable object vide pour y mettre nos filtres
 
@@ -67,7 +64,7 @@ router.get("/offers", async (req, res) => {
 
     //gestion du prix
     if (req.query.priceMin) {
-      filtersObject.product_price = { $gtz: req.query.priceMinc };
+      filtersObject.product_price = { $gte: req.query.priceMinc };
     }
     // Si j'ai déjà une clé product_price dans mon objet filterObject
     if (req.query.priceMax) {
