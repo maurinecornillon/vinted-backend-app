@@ -13,7 +13,7 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 //------------------------------------------//
 // PUBLICATION DUN ARTICLE
 
-router.post("/offer/publish", isAuthenticated, async (req, res) => {
+router.post("/publish", isAuthenticated, async (req, res) => {
   console.log("Publication en cours");
 
   try {
