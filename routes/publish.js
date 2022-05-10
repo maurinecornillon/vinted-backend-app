@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
+console.log(process.env.CLOUD_NAME);
 // Import des models
 const User = require("../models/User");
 const Offer = require("../models/Offer");
@@ -14,13 +20,13 @@ const isAuthenticated = require("../middleware/isAuthenticated");
 // PUBLICATION DUN ARTICLE
 
 router.post("/publish", isAuthenticated, async (req, res) => {
-  console.log("Publication en cours");
+  // console.log("Publication en cours");
 
   try {
     let pictureToUpload = req.files.picture.path;
-    //console.log(pictureToUpload);
+    // console.log(pictureToUpload);
     const result = await cloudinary.uploader.upload(pictureToUpload);
-
+    console.log(result);
     //
     const newOffer = new Offer({
       product_name: req.fields.title,

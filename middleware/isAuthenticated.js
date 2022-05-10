@@ -4,7 +4,7 @@ const User = require("../models/User");
 // FONCTION MIDDLEWARE
 
 const isAuthenticated = async (req, res, next) => {
-  console.log(req.headers);
+  // console.log(req.headers);
   if (req.headers.authorization) {
     console.log(req.headers.authorization);
     const checkUser = await User.findOne({
