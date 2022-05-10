@@ -54,75 +54,93 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
 //------------------------------------------//
 // AFFICHER LES ANNONCES
 
-// router.get("/offers", async (req, res) => {
-//   console.log("Afficher les annonces");
+router.get("/offers", async (req, res) => {
+  console.log("Afficher les annonces");
 
-//   try {
-//     const filtersObject = {}; // créa d'une variable object vide pour y mettre nos filtres
+  try {
+    const filtersObject = {}; // créa d'une variable object vide pour y mettre nos filtres
 
-//     //gestion du title
-//     if (req.query.title) {
-//       filtersObject.product_name = new RegExp(req.query.title, "i");
-//     }
+    //gestion du title
+    if (req.query.title) {
+      filtersObject.product_name = new RegExp(req.query.title, "i");
+    }
 
-//     //gestion du prix
-//     if (req.query.priceMin) {
-//       filtersObject.product_price = { $gtz: req.query.priceMinc };
-//     }
-//     // Si j'ai déjà une clé product_price dans mon objet filterObject
-//     if (req.query.priceMax) {
-//       if (filtersObject.product_price) {
-//         filtersObject.product_price.$lte = req.query.priceMax;
-//       } else {
-//         filtersObject.product_price = {
-//           $lte: req.query.priceMax,
-//         };
-//       }
-//     }
-//     //gestion du tri avec l'objet sortObject
-//     const sortObject = {};
-//     if (req.query.sort === "price-desc") {
-//       sortObject.product_price = "desc";
-//     } else if (req.query.sort === "price-asc") {
-//       sortObject.product_price = "asc";
-//     }
+    //gestion du prix
+    if (req.query.priceMin) {
+      filtersObject.product_price = { $gtz: req.query.priceMinc };
+    }
+    // Si j'ai déjà une clé product_price dans mon objet filterObject
+    if (req.query.priceMax) {
+      if (filtersObject.product_price) {
+        filtersObject.product_price.$lte = req.query.priceMax;
+      } else {
+        filtersObject.product_price = {
+          $lte: req.query.priceMax,
+        };
+      }
+    }
+    //gestion du tri avec l'objet sortObject
+    const sortObject = {};
+    if (req.query.sort === "price-desc") {
+      sortObject.product_price = "desc";
+    } else if (req.query.sort === "price-asc") {
+      sortObject.product_price = "asc";
+    }
 
-//     // console.log(filtersObject);
+    // console.log(filtersObject);
 
-//     //gestion de la pagination
-//     // On a par défaut 5 annonces par page
-//     //Si ma page est égale à 1 je devrais skip 0 annonces
-//     //Si ma page est égale à 2 je devrais skip 5 annonces
-//     //Si ma page est égale à 4 je devrais skip 15 annonces
+    //gestion de la pagination
+    // On a par défaut 5 annonces par page
+    //Si ma page est égale à 1 je devrais skip 0 annonces
+    //Si ma page est égale à 2 je devrais skip 5 annonces
+    //Si ma page est égale à 4 je devrais skip 15 annonces
 
-//     //(1-1) * 5 = skip 0 ==> PAGE 1
-//     //(2-1) * 5 = SKIP 5 ==> PAGE 2
-//     //(4-1) * 5 = SKIP 15 ==> PAGE 4
-//     // ==> (PAGE - 1) * LIMIT
+    //(1-1) * 5 = skip 0 ==> PAGE 1
+    //(2-1) * 5 = SKIP 5 ==> PAGE 2
+    //(4-1) * 5 = SKIP 15 ==> PAGE 4
+    // ==> (PAGE - 1) * LIMIT
 
-//     let limit = 3;
-//     if (req.query.limit) {
-//       limit = req.query.limit;
-//     }
+    let limit = 3;
+    if (req.query.limit) {
+      limit = req.query.limit;
+    }
 
-//     let page = 1;
-//     if (req.query.page) {
-//       page = req.query.page;
-//     }
+    let page = 1;
+    if (req.query.page) {
+      page = req.query.page;
+    }
 
-//     const offers = await Offer.find(filtersObject)
-//       .sort(sortObject)
-//       .skip((page - 1) * limit)
-//       .limit(limit)
-//       .select("product_name product_price");
+    const offers = await Offer.find(filtersObject)
+      .sort(sortObject)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .select(
+        "product_details product_pictures _id product_name product_description product_price owner"
+      );
 
-//     const count = await Offer.countDocuments(filtersObject);
+    const count = await Offer.countDocuments(filtersObject);
 
-//     res.json({ count: count, offers: offers });
-//   } catch (error) {
-//     res.status(404).json({ error: error.message });
-//   }
-// });
+    res.json({ count: count, offers: offers });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
+});
 
+/// Route offer
+router.get("/offer/:id", async (req, res) => {
+  console.log("OFFER route");
+  console.log(req.params);
+  try {
+    const offerToShow = await Offer.findById(req.params.id).populate({
+      path: "owner",
+      select: "account.username email -_id",
+    });
+    res.json(offerToShow);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+module.exports = router;
 // export des routes
 module.exports = router;
