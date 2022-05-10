@@ -112,7 +112,7 @@ router.get("/offers", async (req, res) => {
       .skip((page - 1) * limit)
       .limit(limit)
       .select(
-        "product_details product_pictures _id product_name product_description product_price owner"
+        "product_details product_image _id product_name product_description product_price owner"
       );
 
     const count = await Offer.countDocuments(filtersObject);
