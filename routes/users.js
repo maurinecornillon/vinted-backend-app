@@ -16,7 +16,7 @@ const Offer = require("../models/User");
 //------------------------------------------//
 // INSCRIPTION NOUVEAU USER
 
-router.post("/user/signup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   console.log("Inscription en cours");
 
   try {
@@ -55,7 +55,7 @@ router.post("/user/signup", async (req, res) => {
 //------------------------------------------//
 // CONNEXION
 
-router.post("/user/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   console.log("Connexion en cours");
 
   try {
@@ -75,7 +75,7 @@ router.post("/user/login", async (req, res) => {
       });
     }
   } catch (error) {
-    res.status(404).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 });
 
