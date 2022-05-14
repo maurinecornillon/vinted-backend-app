@@ -23,6 +23,9 @@ app.use(userRoutes);
 const publishRoutes = require("./routes/publish");
 app.use(publishRoutes);
 
+const paymentRoutes = require("./routes/payment");
+app.use(paymentRoutes);
+
 //serveur
 
 app.listen(process.env.PORT, () => {
